@@ -30,9 +30,11 @@ pattern = re.compile(r'(?i)\.htm(?=[?#"\'])')
 replacements = {
     "http://localhost:10004/": "https://tamannika.com/",
     "http://tamannikalokal.local/": "https://tamannika.com/",
+    "https://tamannikalokal.local/": "https://tamannika.com/",
 }
 
 updated_files = 0
+replaced_urls = 0
 
 for folder, dirs, files in os.walk(root):
     for file in files:
@@ -45,9 +47,12 @@ for folder, dirs, files in os.walk(root):
 
             new_content = pattern.sub(".html", content)
 
-            # Ganti semua URL
+            # Ganti semua URL dan hitung jumlahnya
             for old, new in replacements.items():
-                new_content = new_content.replace(old, new)
+                count = new_content.count(old)
+                if count > 0:
+                    replaced_urls += count
+                    new_content = new_content.replace(old, new)
 
             if content != new_content:
                 with open(path, "w", encoding="utf-8") as f:
@@ -58,6 +63,8 @@ for folder, dirs, files in os.walk(root):
 
 print("\n===================================")
 print("Selesai!")
-print(f"File .htm di-rename : {renamed_files}")
-print(f"File HTML diperbarui: {updated_files}")
+print(f"File .htm di-rename                : {renamed_files}")
+print(f"File HTML diperbarui              : {updated_files}")
+print(f"URL localhost/.local diganti      : {replaced_urls}")
+print("Tujuan URL                        : https://tamannika.com/")
 print("===================================")
