@@ -2,12 +2,12 @@
 	<service>
 		<engineName>WordPress</engineName>
 		<engineLink>https://wordpress.org/</engineLink>
-		<homePageLink>http://localhost:10010</homePageLink>
+		<homePageLink>http://localhost:10004</homePageLink>
 		<apis>
-			<api name="WordPress" blogID="1" preferred="true" apiLink="http://localhost:10010/xmlrpc.php" />
-			<api name="Movable Type" blogID="1" preferred="false" apiLink="http://localhost:10010/xmlrpc.php" />
-			<api name="MetaWeblog" blogID="1" preferred="false" apiLink="http://localhost:10010/xmlrpc.php" />
-			<api name="Blogger" blogID="1" preferred="false" apiLink="http://localhost:10010/xmlrpc.php" />
+			<api name="WordPress" blogID="1" preferred="true" apiLink="http://localhost:10004/xmlrpc.php" />
+			<api name="Movable Type" blogID="1" preferred="false" apiLink="http://localhost:10004/xmlrpc.php" />
+			<api name="MetaWeblog" blogID="1" preferred="false" apiLink="http://localhost:10004/xmlrpc.php" />
+			<api name="Blogger" blogID="1" preferred="false" apiLink="http://localhost:10004/xmlrpc.php" />
 					</apis>
 	</service>
 </rsd>
