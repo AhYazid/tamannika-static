@@ -1,5 +1,7 @@
 import os
 import re
+import datetime
+import xml.etree.ElementTree as ET
 
 # Folder tempat script dijalankan
 root = os.path.abspath(".")
@@ -114,6 +116,69 @@ for folder, dirs, files in os.walk(root):
                 updated_files += 1
                 print(f"Updated: {path}")
 
+# ===========================
+# 3. Generate sitemap.xml
+# ===========================
+
+DOMAIN = "https://tamannika.com"
+
+urlset = ET.Element(
+    "urlset",
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+)
+
+sitemap_urls = 0
+
+for folder, dirs, files in os.walk(root):
+
+    # Folder yang tidak perlu dimasukkan sitemap
+    dirs[:] = [
+        d for d in dirs
+        if d not in (
+            ".git",
+            ".github",
+            "__pycache__",
+            "wp-content",
+            "wp-admin",
+            "wp-includes"
+        )
+    ]
+
+    for file in files:
+
+        if file.lower() != "index.html":
+            continue
+
+        path = os.path.join(folder, file)
+
+        rel_path = os.path.relpath(path, root).replace("\\", "/")
+
+        if rel_path == "index.html":
+            url = DOMAIN + "/"
+        else:
+            url = DOMAIN + "/" + os.path.dirname(rel_path).replace("\\", "/") + "/"
+
+        url_element = ET.SubElement(urlset, "url")
+
+        ET.SubElement(url_element, "loc").text = url
+
+        lastmod = datetime.datetime.utcfromtimestamp(
+            os.path.getmtime(path)
+        ).strftime("%Y-%m-%dT%H:%M:%S+00:00")
+
+        ET.SubElement(url_element, "lastmod").text = lastmod
+
+        sitemap_urls += 1
+
+tree = ET.ElementTree(urlset)
+
+ET.indent(tree, space="    ", level=0)
+
+tree.write(
+    os.path.join(root, "sitemap.xml"),
+    encoding="utf-8",
+    xml_declaration=True
+)
 
 print("\n===================================")
 print("Selesai!")
@@ -125,4 +190,6 @@ print(f"File yang berisi perubahan GTAG    : {gtag_files} file")
 print(f"Canonical diperbaiki               : {fixed_canonical} referensi")
 print(f"File yang canonical diperbaiki     : {canonical_files} file")
 print("Tujuan URL                         : https://tamannika.com/")
+print(f"Sitemap dibuat                    : sitemap.xml")
+print(f"Jumlah URL dalam sitemap          : {sitemap_urls}")
 print("===================================")
