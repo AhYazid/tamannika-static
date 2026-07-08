@@ -31,6 +31,12 @@ replacements = {
     "http://localhost:10004/": "https://tamannika.com/",
     "http://tamannikalokal.local/": "https://tamannika.com/",
     "https://tamannikalokal.local/": "https://tamannika.com/",
+
+    'href="wp-content/uploads/2025/07/cropped-logo-tamannika-e1751592306709-32x32.jpeg"':
+    'href="https://tamannika.com/wp-content/uploads/2025/07/cropped-logo-tamannika-e1751592306709-32x32.jpeg"',
+
+    'href="wp-content/uploads/2025/07/cropped-logo-tamannika-e1751592306709-192x192.jpeg"':
+    'href="https://tamannika.com/wp-content/uploads/2025/07/cropped-logo-tamannika-e1751592306709-192x192.jpeg"',
 }
 
 updated_files = 0
