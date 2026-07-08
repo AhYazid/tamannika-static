@@ -21,13 +21,11 @@ for folder, dirs, files in os.walk(root):
             renamed_files += 1
             print(f"Renamed: {old_path} -> {new_path}")
 
-
 # ===========================
 # 2. Update isi file HTML
 # ===========================
 
 pattern = re.compile(r'(?i)\.htm(?=[?#"\'])')
-
 
 replacements = {
     "http://localhost:10004/": "https://tamannika.com/",
@@ -41,17 +39,20 @@ replacements = {
     'href="https://tamannika.com/wp-content/uploads/2025/07/cropped-logo-tamannika-e1751592306709-192x192.jpeg"',
 }
 
-
+# ===========================
 # Perbaikan Google Tag / GA4
-gtag_pattern = re.compile(
-    r'src=["\'](?:\.\./|/)?gtag/js\?id=(G-[A-Z0-9]+)["\']'
-)
+# ===========================
 
+gtag_pattern = re.compile(
+    r'src=["\'][^"\']*gtag/js\?id=(G-[A-Z0-9]+)["\']'
+)
 
 updated_files = 0
 replaced_urls = 0
-fixed_gtag = 0
 
+# Statistik Google Tag
+fixed_gtag = 0          # Total referensi yang diperbaiki
+gtag_files = 0          # Jumlah file yang mengalami perbaikan GTAG
 
 for folder, dirs, files in os.walk(root):
     for file in files:
@@ -63,9 +64,7 @@ for folder, dirs, files in os.walk(root):
             with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
 
-
             new_content = pattern.sub(".html", content)
-
 
             # Ganti URL lama
             for old, new in replacements.items():
@@ -76,15 +75,15 @@ for folder, dirs, files in os.walk(root):
                     replaced_urls += count
                     new_content = new_content.replace(old, new)
 
-
             # Perbaiki Google Tag
             new_content, count_gtag = gtag_pattern.subn(
                 r'src="https://www.googletagmanager.com/gtag/js?id=\1"',
                 new_content
             )
 
-            fixed_gtag += count_gtag
-
+            if count_gtag > 0:
+                fixed_gtag += count_gtag
+                gtag_files += 1
 
             # Simpan jika berubah
             if content != new_content:
@@ -95,12 +94,12 @@ for folder, dirs, files in os.walk(root):
                 updated_files += 1
                 print(f"Updated: {path}")
 
-
 print("\n===================================")
 print("Selesai!")
 print(f"File .htm di-rename                : {renamed_files}")
-print(f"File HTML diperbarui              : {updated_files}")
-print(f"URL localhost/.local diganti      : {replaced_urls}")
-print(f"Google Tag diperbaiki             : {fixed_gtag}")
-print("Tujuan URL                        : https://tamannika.com/")
+print(f"File HTML diperbarui               : {updated_files}")
+print(f"URL localhost/.local diganti       : {replaced_urls}")
+print(f"Google Tag diperbaiki              : {fixed_gtag} referensi")
+print(f"File yang berisi perubahan GTAG    : {gtag_files} file")
+print("Tujuan URL                         : https://tamannika.com/")
 print("===================================")
