@@ -85,6 +85,26 @@ for folder, dirs, files in os.walk(root):
                 fixed_gtag += count_gtag
                 gtag_files += 1
 
+            # ===========================
+            # Perbaiki Canonical
+            # ===========================
+
+            rel_path = os.path.relpath(path, root).replace("\\", "/")
+
+            if rel_path == "index.html":
+                canonical_url = DOMAIN + "/"
+            else:
+                canonical_url = DOMAIN + "/" + os.path.dirname(rel_path).replace("\\", "/") + "/"
+
+            new_content, canonical_count = canonical_pattern.subn(
+                f'<link rel="canonical" href="{canonical_url}" />',
+                new_content
+            )
+
+            if canonical_count > 0:
+                fixed_canonical += canonical_count
+                canonical_files += 1
+
             # Simpan jika berubah
             if content != new_content:
 
@@ -94,6 +114,7 @@ for folder, dirs, files in os.walk(root):
                 updated_files += 1
                 print(f"Updated: {path}")
 
+
 print("\n===================================")
 print("Selesai!")
 print(f"File .htm di-rename                : {renamed_files}")
@@ -101,5 +122,7 @@ print(f"File HTML diperbarui               : {updated_files}")
 print(f"URL localhost/.local diganti       : {replaced_urls}")
 print(f"Google Tag diperbaiki              : {fixed_gtag} referensi")
 print(f"File yang berisi perubahan GTAG    : {gtag_files} file")
+print(f"Canonical diperbaiki               : {fixed_canonical} referensi")
+print(f"File yang canonical diperbaiki     : {canonical_files} file")
 print("Tujuan URL                         : https://tamannika.com/")
 print("===================================")
