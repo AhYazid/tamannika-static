@@ -3,6 +3,6 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://agrotanisejahtera.co.id/sitemap.xml
+Sitemap: https://tamannika.com/sitemap.xml
 # ---------------------------
 # END BLOCK
