@@ -1,0 +1,8 @@
+# START BLOCK
+# ---------------------------
+User-agent: *
+Disallow:
+
+Sitemap: https://agrotanisejahtera.co.id/sitemap.xml
+# ---------------------------
+# END BLOCK
