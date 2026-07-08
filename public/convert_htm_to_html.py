@@ -6,6 +6,9 @@ import xml.etree.ElementTree as ET
 # Folder tempat script dijalankan
 root = os.path.abspath(".")
 
+# Domain website
+DOMAIN = "https://tamannika.com"
+
 # ===========================
 # 1. Rename semua file .htm -> .html
 # ===========================
@@ -48,6 +51,19 @@ replacements = {
 gtag_pattern = re.compile(
     r'src=["\'][^"\']*gtag/js\?id=(G-[A-Z0-9]+)["\']'
 )
+
+# ===========================
+# Perbaikan Canonical
+# ===========================
+
+canonical_pattern = re.compile(
+    r'<link\s+rel=["\']canonical["\']\s+href=["\'][^"\']*["\']\s*/?>',
+    re.IGNORECASE
+)
+
+# Statistik Canonical
+fixed_canonical = 0
+canonical_files = 0
 
 updated_files = 0
 replaced_urls = 0
@@ -120,8 +136,6 @@ for folder, dirs, files in os.walk(root):
 # 3. Generate sitemap.xml
 # ===========================
 
-DOMAIN = "https://tamannika.com"
-
 urlset = ET.Element(
     "urlset",
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -183,6 +197,7 @@ tree.write(
 print("\n===================================")
 print("Selesai!")
 print(f"File .htm di-rename                : {renamed_files}")
+print(f"Link rel icon diperbarui           : tamannika.com ditambah ke url")
 print(f"File HTML diperbarui               : {updated_files}")
 print(f"URL localhost/.local diganti       : {replaced_urls}")
 print(f"Google Tag diperbaiki              : {fixed_gtag} referensi")
